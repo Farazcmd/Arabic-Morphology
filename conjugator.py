@@ -9,28 +9,59 @@ userRoot = simpledialog.askstring("Input", "Enter your three letter root verb (e
 
 
 past_rules = {
-    "" : "هو",
-    "ا" : "هما",
-    "وا" : "هم",
+    "هو" : "",
+    "هما مذكر" : "ا",
+    "هم" : "وا",
 
-    "تْ" : "هي",
-    "تا" : "هما",
-    "هُنَّ" : "هن",
+    "هي" : "تْ",
+    "هما مؤنث" : "تا",
+    "هن" : "هُنَّ",
 
-    "تَ" : "انت",
-    "تُما" : "انتما",
-    "تُم" : "انتم",
+    "انت" : "تَ",
+    "انتما مذكر" : "تُما",
+    "انتم" : "ْتُم",
 
-    "تِ" : "انتِ",
-    "تُما" : "انتما",
-    "تًنَّ" : "انتنَّ",
+    "انتِ" : "تِ",
+    "انتما مؤنث" : "تُما",
+    "انتنَّ" : "تًنَّ",
 
-    "ُت" : "انا",
-    "نَا" : "نحن", 
+    "انا" : "ُت",
+    "نحن" : "نَا"
 }
 
-for pronouns, suffixes in past_rules.items():
-    arabic_label = tk.Label(root, text = userRoot + pronouns, font = ("Arial", 20), anchor = "e")
-    arabic_label.pack(fill = "x", padx = 20, pady = 5)
+present_rules = {
+    "هو" : ["يَ", " ُ"],
+    "هما مذكر" : ["يَ", "انِ َ"],
+    "هم" : ["يَ", "ونَ ُ"],
+
+    "هي" : ["تَ", " ُ"],
+    "هما مؤنث" : ["تَ", "انِ َ"],
+    "هن" : ["يَ", "نَ ْ"],
+
+    "انتَ" : ["تَ", " ُ"],
+    "انتما مذكر" : ["تَ", "انِ َ"],
+    "انتم" : ["تَ", "ونَ ُ"],
+
+    "انتِ" : ["تَ", "ينَ ِ"],
+    "انتما مؤنث" : ["تَ", "انِ َ"],
+    "انتنَّ" : ["تَ", "نَ ْ"],
+
+    "انا" : ["أَ", " ُ"],
+    "نحن" : ["نَ", " ُ"]
+}
+
+labelPast = tk.Label(root, text = "Past tense verbs")
+labelPast.grid(column = 0)
+
+for pronoun, suffix in past_rules.items():
+    arabic_label = tk.Label(root, text = userRoot + suffix, font = ("Arial", 20), anchor = "e")
+    arabic_label.grid(column = 0)
     
+labelPresent = tk.Label(root, text = "Present tense verbs")
+labelPresent.grid(column= 10)
+
+for pronoun, sufpre in present_rules.items():
+    arabic_label = tk.Label(root, text = sufpre[0] + userRoot[0] + "ْ" + userRoot[1:] + sufpre[1], font = ("Arial", 20), anchor = "e")
+    arabic_label.grid(column = 0)
+
 root.mainloop()
