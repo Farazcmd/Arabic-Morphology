@@ -1,17 +1,12 @@
-from bidi.algorithm import get_display
-import tkinter as ui
+import tkinter as tk
 from tkinter import simpledialog
 
-# Hide the ugly blank main UI window
-root = ui.Tk()
-root.withdraw()
+root = tk.Tk()
+root.geometry("400x200+470+270")
 
 # Open a native Windows input box (This fully supports natural Arabic typing!)
 userRoot = simpledialog.askstring("Input", "Enter your three letter root verb (e.g., كتب):")
 
-
-
-print(get_display(f"Root: {userRoot}"))
 
 past_rules = {
     "" : "هو",
@@ -26,7 +21,7 @@ past_rules = {
     "تُما" : "انتما",
     "تُم" : "انتم",
 
-    "ِت" : "انتِ",
+    "تِ" : "انتِ",
     "تُما" : "انتما",
     "تًنَّ" : "انتنَّ",
 
@@ -34,7 +29,8 @@ past_rules = {
     "نَا" : "نحن", 
 }
 
-for pronoun, suffix in past_rules.items():
-    conjugatedVerb = userRoot + pronoun
-    print(get_display(conjugatedVerb))
-    print("\n")
+for pronouns, suffixes in past_rules.items():
+    arabic_label = tk.Label(root, text = userRoot + pronouns, font = ("Arial", 20), anchor = "e")
+    arabic_label.pack(fill = "x", padx = 20, pady = 5)
+    
+root.mainloop()
