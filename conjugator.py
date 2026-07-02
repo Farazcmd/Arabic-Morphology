@@ -9,59 +9,63 @@ userRoot = simpledialog.askstring("Input", "Enter your three letter root verb (e
 
 
 past_rules = {
-    "هو" : "",
-    "هما مذكر" : "ا",
-    "هم" : "وا",
+    "هو" : "َ",
+    "هما مذكر" : "َا",
+    "هم" : "ُوا",
 
-    "هي" : "تْ",
-    "هما مؤنث" : "تا",
-    "هن" : "هُنَّ",
+    "هي" : "َتْ",
+    "هما مؤنث" : "َتَا",
+    "هن" : "ْنَ",
 
-    "انت" : "تَ",
-    "انتما مذكر" : "تُما",
+    "انت" : "ْتَ",
+    "انتما مذكر" : "ْتُما",
     "انتم" : "ْتُم",
 
     "انتِ" : "تِ",
-    "انتما مؤنث" : "تُما",
-    "انتنَّ" : "تًنَّ",
+    "انتما مؤنث" : "تُمَا",
+    "انتنَّ" : "ْتُنَّ",
 
-    "انا" : "ُت",
-    "نحن" : "نَا"
+    "انا" : "ْتُ",
+    "نحن" : "ْنَا"
 }
 
 present_rules = {
-    "هو" : ["يَ", " ُ"],
-    "هما مذكر" : ["يَ", "انِ َ"],
-    "هم" : ["يَ", "ونَ ُ"],
+    "هو" : ["يَ", "ُ"],
+    "هما مذكر" : ["يَ", "انِ"],
+    "هم" : ["يَ", "ُونَ"],
 
-    "هي" : ["تَ", " ُ"],
-    "هما مؤنث" : ["تَ", "انِ َ"],
-    "هن" : ["يَ", "نَ ْ"],
+    "هي" : ["تَ", "ُ"],
+    "هما مؤنث" : ["تَ", "َانِ"],
+    "هن" : ["يَ", "ْنَ"],
 
-    "انتَ" : ["تَ", " ُ"],
-    "انتما مذكر" : ["تَ", "انِ َ"],
-    "انتم" : ["تَ", "ونَ ُ"],
+    "انتَ" : ["تَ", "ُ"],
+    "انتما مذكر" : ["تَ", "َانِ"],
+    "انتم" : ["تَ", "ُونَ"],
 
-    "انتِ" : ["تَ", "ينَ ِ"],
-    "انتما مؤنث" : ["تَ", "انِ َ"],
-    "انتنَّ" : ["تَ", "نَ ْ"],
+    "انتِ" : ["تَ", "ِينَ"], 
+    "انتما مؤنث" : ["تَ", "َانِ"],
+    "انتنَّ" : ["تَ", "ْنَ"],
 
-    "انا" : ["أَ", " ُ"],
-    "نحن" : ["نَ", " ُ"]
+    "انا" : ["أَ", "ُ"],
+    "نحن" : ["نَ", "ُ"]
 }
 
-labelPast = tk.Label(root, text = "Past tense verbs")
-labelPast.grid(column = 0)
+labelPast = tk.Label(root, text = "Past tense verbs", font=("Arial", 12, "bold"))
+labelPast.grid(row = 0, column = 1, sticky="ew", padx=20, pady=5)
 
+r = 1
 for pronoun, suffix in past_rules.items():
     arabic_label = tk.Label(root, text = userRoot + suffix, font = ("Arial", 20), anchor = "e")
-    arabic_label.grid(column = 0)
+    arabic_label.grid(row = r, column = 1, sticky="ew", padx=20)
+    r += 1
     
-labelPresent = tk.Label(root, text = "Present tense verbs")
-labelPresent.grid(column= 10)
+labelPresent = tk.Label(root, text = "Present tense verbs", font=("Arial", 12, "bold"))
+labelPresent.grid(row = 0, column = 0, sticky="ew", padx=20, pady=5)
 
+r = 1
 for pronoun, sufpre in present_rules.items():
     arabic_label = tk.Label(root, text = sufpre[0] + userRoot[0] + "ْ" + userRoot[1:] + sufpre[1], font = ("Arial", 20), anchor = "e")
-    arabic_label.grid(column = 0)
+    arabic_label.grid(row = r, column = 0, sticky="ew", padx=20)
+    r += 1
 
 root.mainloop()
