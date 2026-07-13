@@ -44,17 +44,38 @@ function ArabicConjugator() {
     ["نَ", "ُ"]
     ]
 
-    const [root, setRoot] = useState("فَعَلَ");
-
-
-
-    function updateRoot(event) {
-        setRoot(event.target.value);
+    const DIACRITICS_REGEX = /[\u064B-\u0652]/;
+    function removeUnwantedDiacritics(root){
+        if (!root) return "";
+        const lastChar = root.slice(-1);
+        if (DIACRITICS_REGEX.test(lastChar)) {
+            root = root.slice(0, -1);
+        }
+        if (root[1] && DIACRITICS_REGEX.test(root[1])) {
+            root = root[0] + root.slice(2);
+        }
+        return root;
     }
 
+    const [root, setRoot] = useState(removeUnwantedDiacritics("فَعَلَ"));
+    const [displayRoot, setDisplayRoot] = useState("فَعَلَ");
+
+    function updateRoot(event) {
+        const cleanRoot = displayRoot.trim();
+        if (cleanRoot !== "") {
+            const finalRoot = removeUnwantedDiacritics(cleanRoot);
+            setRoot(finalRoot);
+        }
+    }
+
+    function updateDisplayRoot(event) {
+        setDisplayRoot(event.target.value);
+    }
+
+
     return(<>
-        <input type="text" placeholder="Enter a root... e.g., كتب" className="root-container" value={root} onChange={updateRoot}/>
-        <button className="conjugate-button">Conjugate</button>
+        <input type="text" placeholder="Enter a root... e.g., كتب" className="root-container" value={displayRoot} onChange={updateDisplayRoot}/>
+        <button type="button" className="conjugate-button" onClick={updateRoot}>Conjugate</button>
 
         <div className="container">
 
