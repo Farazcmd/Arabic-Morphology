@@ -2,7 +2,7 @@
 
 A minimalistic web application that algorithmically conjugates Arabic root verbs into their past (الماضي) and present (المضارع) tenses. Built with a focus on clean typography and a simple user experience.
 
-It is in progress, and currently only supports form I verb conjugations
+## It is in progress, and currently only supports form I verb conjugations
 
 ## Features
 - **Algorithmic Conjugation:** Generates full conjugation tables based on the provided Arabic root.
