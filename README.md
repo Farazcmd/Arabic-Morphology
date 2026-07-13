@@ -4,7 +4,6 @@ A minimalistic web application that algorithmically conjugates Arabic root verbs
 
 ## Features
 - **Algorithmic Conjugation:** Generates full conjugation tables based on the provided Arabic root.
-- **Bilingual Interface:** Balanced English and Arabic typography using the Cairo font for seamless readability.
 - **Minimalist UI:** Clean layout without unnecessary visual clutter.
 - **Legacy Support:** Contains the older version of the app for reference and archival purposes.
 
