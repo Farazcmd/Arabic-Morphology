@@ -1,4 +1,7 @@
 body{
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: antiquewhite;
+  color: rgb(148, 7, 7);
   text-align: center;
 }
 
@@ -14,3 +17,32 @@ body{
   background-color: hsla(0, 0%, 0%, 0.041);
   transition: 0.5s ease-in-out;
 }
+
+.conjugate-button{
+  padding: 10px;
+  margin: 10px;
+  font-size: 15px;
+  border-radius: 14px;
+  border: 1px solid rgb(121, 16, 16);
+  cursor: pointer;
+}
+
+.conjugate-button:hover {
+  transition: ease-in-out 0.1s; 
+  box-shadow: 0 6px 16px rgba(121, 16, 16, 0.3); 
+}
+
+.container{
+  display: flex;
+  justify-content: space-evenly;
+  font-size: 25px;
+}
+
+.conjugation-column{
+  list-style-type: none;
+}
+
+h3{
+  font-size: 20px;
+}
+
