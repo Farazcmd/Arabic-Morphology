@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 
 
 function ArabicConjugator() {
@@ -18,7 +18,7 @@ function ArabicConjugator() {
     "ْتُما",
     "ْتُم",
 
-    "تِ",
+    "ْتِ",
     "تُمَا",
     "ْتُنَّ",
 
@@ -46,6 +46,7 @@ function ArabicConjugator() {
     ["أَ", "ُ"],
     ["نَ", "ُ"]
     ]
+    
 
     const DIACRITICS_REGEX = /[\u064B-\u0652]/;
     const ALL_DIACRITICS_REGEX = /[\u064B-\u0652]/g;
@@ -68,32 +69,48 @@ function ArabicConjugator() {
 
     const [root, setRoot] = useState(removeUnwantedDiacritics("فَعَلَ", false));
     const [displayRoot, setDisplayRoot] = useState("فَعَلَ");
+    const [rootError, setRootError] = useState("");
+
+    const cleanRoot = removeUnwantedDiacritics(root, true)
+    const [letter1, letter2, letter3] = cleanRoot;
+    const middleDiacritic =  (DIACRITICS_REGEX.test(root[2]) && root[2] || DIACRITICS_REGEX.test(root[3]) && root[3]) || "";
+
 
     function updateRoot(event) {
-        const cleanRoot = displayRoot.trim();
-        if (cleanRoot !== "") {
-            const finalRoot = removeUnwantedDiacritics(cleanRoot, false);
-            setRoot(finalRoot);
+        const temp = displayRoot.trim();
+        if (temp === "") return;
+
+        const cleanedLength = removeUnwantedDiacritics(temp, true).length;
+        if (cleanedLength !== 3) {
+            setRootError("Root must have exactly 3 letters.");
+            return;
         }
+        const finalRoot = removeUnwantedDiacritics(temp, false);
+        setRoot(finalRoot);
+        setRootError("");
     }
 
     function updateDisplayRoot(event) {
         setDisplayRoot(event.target.value);
     }
 
-    
     const[font, setFont] = useState("Amiri");
+
+    useEffect(() => {
+        document.body.style.fontFamily = `'${font}', sans-serif`;
+        document.body.style.fontWeight = font === "Tajawal" ? "600" : "500";
+    }, [font]);
+
     function changeFont(event) {
-        setFont(event.target.value)
-        document.body.style.fontFamily = `'${event.target.value}', sans-serif`;
-        document.body.style.fontWeight = event.target.value === "Tajawal" ? "600" : "500";
+        setFont(event.target.value);
     }
 
     return(<>
         <input type="text" placeholder="Enter a root... e.g., كتب" className="root-container" value={displayRoot} onChange={updateDisplayRoot}/>
         <button type="button" className="conjugate-button" onClick={updateRoot}>Conjugate</button>
-        <label className="fontLabel" for="fontSelect">Change font:</label>
-        <select className="fontSelect" name="fontSelect" id="fontSelect" onChange={changeFont}>
+        {rootError && <p className="root-error">{rootError}</p>}
+        <label className="fontLabel" htmlFor="fontSelect">Change font:</label>
+        <select className="fontSelect" id="fontSelect" onChange={changeFont}>
             <option value="Amiri">Amiri</option>
             <option value="Tajawal">Tajawal</option>
         </select>
@@ -103,39 +120,46 @@ function ArabicConjugator() {
 
             <div className="conjugation-column">
                 <h3>المَاضِي المَعْرُوف (Active Past)</h3>
+                <ul>
                 {root.trim() !== "" && past_rules.map((conjugations, index) => (
                 <React.Fragment key={index}>
                 <li>{root[0] + 'َ' + root.slice(1) + conjugations}</li>
                 {(index + 1) % 3 === 0 && <br/>}
-                </React.Fragment>))} 
+                </React.Fragment>))}
+                </ul>
             </div>
                 
             <div className="conjugation-column">
                 <h3>المَاضِي المَجْهُول (Passive Past)</h3>
+                <ul>
                 {root.trim() !== "" && past_rules.map((conjugations, index) =>
                 <React.Fragment key={index}>
-                <li>{root[0] + "ُ" + root[1] + "ِ" + root.slice(3) + conjugations}</li>
+                <li>{letter1 + "ُ" + letter2 + "ِ" + letter3 + conjugations}</li>
                 {(index + 1) % 3 === 0 && <br/>}
                 </React.Fragment>)}
+                </ul>
             </div>
 
             <div className="conjugation-column">
                 <h3>المُضَارِع المَعْرُوف (Present Tense)</h3>
+                <ul>
                 {root.trim() !== "" && present_rules.map((conjugations, index) => (
                 <React.Fragment key={index}>
-                <li>{conjugations[0] + root[0] + "ْ" + root.slice(1) + conjugations[1]}</li>
+                <li>{conjugations[0] + letter1 + "ْ" + root.slice(1) + conjugations[1]}</li>
                 {(index + 1) % 3 === 0 && <br/>}
                 </React.Fragment>))} 
-            
+                </ul>
             </div>
 
             <div className="conjugation-column">
                 <h3>المُضَارِع المَجْهُول Passive Present</h3>
+                <ul>
                 {root.trim() !== "" && present_rules.map((conjugations, index) =>
                 <React.Fragment key={index}>
-                <li>{conjugations[0][0] + "ُ" + root[0] + "ْ" + root.slice(1) + conjugations[1]}</li>
+                <li>{conjugations[0][0] + "ُ" + letter1 + "ْ" + letter2 + "َ" + letter3 + conjugations[1]}</li>
                 {(index + 1) % 3 === 0 && <br/>}
                 </React.Fragment>)}
+                </ul>
             </div>
 
         </div>
