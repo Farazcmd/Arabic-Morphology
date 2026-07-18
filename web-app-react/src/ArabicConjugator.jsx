@@ -19,7 +19,7 @@ const ConjugationColumn = React.memo(function ConjugationColumn ({ title, form }
 
 
 function ArabicConjugator() {
-    
+
 
     const past_rules = [
     "َ",
@@ -69,11 +69,10 @@ function ArabicConjugator() {
 
     function removeUnwantedDiacritics(root, removeAll){
         if (!root) return "";
-    
+
         if (removeAll) {
             return root.replace(ALL_DIACRITICS_REGEX, "");
         } 
-
         if (DIACRITICS_REGEX.test(root.slice(-1))) {
             root = root.slice(0, -1);
         }
@@ -86,15 +85,16 @@ function ArabicConjugator() {
     const [root, setRoot] = useState(removeUnwantedDiacritics("فَعَلَ", false));
     const [displayRoot, setDisplayRoot] = useState("فَعَلَ");
     const [rootError, setRootError] = useState("");
+    const [diacritics, setDiacritics] = useState([]);
 
     const cleanRoot = useMemo(() => removeUnwantedDiacritics(root, true), [root]);
     const [letter1, letter2, letter3] = cleanRoot;
-    const middleDiacritic =  (DIACRITICS_REGEX.test(root[2]) && root[2] || DIACRITICS_REGEX.test(root[3]) && root[3]) || "";
 
 
     function updateRoot(event) {
         const temp = displayRoot.trim();
         if (temp === "") return;
+        setDiacritics((displayRoot && displayRoot.match(ALL_DIACRITICS_REGEX, "")) || [])
 
         const cleanedLength = removeUnwantedDiacritics(temp, true).length;
         if (cleanedLength !== 3) {
@@ -111,19 +111,17 @@ function ArabicConjugator() {
     }
 
     const[font, setFont] = useState("Amiri");
-
-    useEffect(() => {
-        document.body.style.fontFamily = `'${font}', sans-serif`;
-        document.body.style.fontWeight = font === "Tajawal" ? "600" : "500";
-    }, [font]);
-
+    
     function changeFont(event) {
         setFont(event.target.value);
     }
 
+    useEffect(() => {
+        document.body.style.fontFamily = `'${font}', sans-serif`;
+    }, [font]);
 
     const activePastForms = useMemo(
-        () => past_rules.map((conjugations) => root[0] + 'َ' + root.slice(1) + conjugations), [root]
+        () => past_rules.map((conjugations) => letter1 + 'َ' + root.slice(1) + conjugations), [root]
     );
 
     const passivePastForms = useMemo(
@@ -138,6 +136,7 @@ function ArabicConjugator() {
         () => present_rules.map((conjugations) => conjugations[0][0] + "ُ" + letter1 + "ْ" + letter2 + "َ" + letter3 + conjugations[1]), [root]
     );
 
+    
     return(<>
         <input type="text" placeholder="Enter a root... e.g., كتب" className="root-container" value={displayRoot} onChange={updateDisplayRoot}/>
         <button type="button" className="conjugate-button" onClick={updateRoot}>Conjugate</button>
