@@ -88,7 +88,7 @@ function ArabicConjugator() {
     const [diacritics, setDiacritics] = useState([]);
 
     const cleanRoot = useMemo(() => removeUnwantedDiacritics(root, true), [root]);
-    const [letter1, letter2, letter3] = cleanRoot;
+    let [letter1, letter2, letter3] = cleanRoot;
 
 
     function updateRoot(event) {
@@ -116,6 +116,55 @@ function ArabicConjugator() {
         setFont(event.target.value);
     }
 
+    function classifyRoot(root, hasShaddah) {
+        const [letter1, letter2, letter3] = root;
+        const weakLetters = ["و", "ي"];
+        const isDoubled = letter2 === letter3 || hasShaddah;
+        const isHamzated = root.includes("ء");
+        const isAssimilated = weakLetters.includes(letter1);
+        const isHollow = weakLetters.includes(letter2);
+        const isDefective = weakLetters.includes(letter3);
+        const isSound = !(isDoubled || isHamzated || isAssimilated || isHollow || isDefective);
+
+        return { isDoubled, isHamzated, isAssimilated, isHollow, isDefective, isSound };
+    }
+
+    function Hamzate(root, past_rules, present_rules) {
+        let letter1 = root[0];
+        let letter2 = root[1];
+        let letter3 = root[2];
+
+        if (letter1 === "ا") {
+            letter1 = "أ";
+        } if (letter2 === "ا") {
+            letter2 = "أ";
+        } if (letter2 === "و") {
+            letter2 = "ؤ";
+        } if (letter2 === "ي") {
+            letter2 = "ئ";
+        } if (letter3 === "ا") {
+            letter3 = "أ";
+        } if (letter3 === "و") {
+            letter3 = "ؤ";
+        } 
+        
+        const activePastForms = past_rules.map((conjugations) => letter1 + 'َ' + letter2 + root.slice(2) + conjugations);
+        const passivePastForms = past_rules.map((conjugations) => letter1 + "ُ" + letter2 + "ِ" + letter3 + conjugations);
+        const activePresentForms = present_rules.map((conjugations) => conjugations[0] + letter1 + "ْ" + letter2 + root.slice(2) + conjugations[1]);
+        const passivePresentForms = present_rules.map((conjugations) => conjugations[0][0] + "ُ" + letter1 + "ْ" + letter2 + "َ" + letter3 + conjugations[1]);
+
+        if (letter1 === "أ") {
+            activePresentForms[12] = "آ" + letter2 + root.slice(2) + present_rules[12][1];
+            passivePresentForms[12] = "أُؤْ" + letter2 + "َ" + letter3 + present_rules[12][1];
+        }
+
+        return { activePastForms, passivePastForms, activePresentForms, passivePresentForms };
+        /* const { activePastForms, passivePastForms, activePresentForms, passivePresentForms } = 
+        Hamzate(removeUnwantedDiacritics(root, true), past_rules, present_rules);    WRITE THIS TO USE  */
+    }
+
+
+    
     useEffect(() => {
         document.body.style.fontFamily = `'${font}', sans-serif`;
     }, [font]);
